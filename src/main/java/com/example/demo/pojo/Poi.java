@@ -1,5 +1,8 @@
 package com.example.demo.pojo;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+@Data
 @TableName("poi_table")
 public class Poi {
    public String name;
