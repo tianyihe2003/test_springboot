@@ -8,6 +8,7 @@ import com.example.demo.service.IPoiService;
 import com.example.demo.vo.PoiVo;
 import com.example.demo.vo.Result;
 import jakarta.annotation.Resource;
+import jakarta.websocket.server.PathParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,9 @@ public class PoiController {
    @GetMapping("/list")
     public Result list(@RequestParam(defaultValue="1") Integer pageSize,Integer pageNum)
     {
-        log.info("my info,pageNumber={}",pageSize);
-        Page<Poi>  page=new Page<Poi>(pageSize,pageNum);
+
+        log.info("my info,pageSize={},pageNum={}",pageSize,pageNum);
+        Page<Poi>  page=new Page<Poi>(pageNum,pageSize);//这里pageNum和pageSize的顺序不能反，写反了导致前端的数据是反向的
         IPage<Poi> pageResult =poiService.page(page);//pageResult里面包含多余的所有的数据库信息，要对它进行处理
         List<Poi> poiList=pageResult.getRecords();//recoeds上面pageresult获取的列表
 
@@ -81,8 +83,17 @@ public class PoiController {
         return Result.success(pageResult);
     }
 
+//    @GetMapping("/detail/{id}")  //将参数参数作为地址
+//    public Result detail(@PathVariable int id)
+//    {
+//        log.info("my info,pageNumber={}",id);
+//        Poi poi=poiService.getById(id);
+////        Poi poi=new Poi();
+//        //poi.name="小米";
+//        return Result.success(poi);
+//    }
     @GetMapping("/detail/{id}")  //将参数参数作为地址
-    public Result detail(@PathVariable int id)
+    public Result detail(@PathVariable Integer id)
     {
         log.info("my info,pageNumber={}",id);
         Poi poi=poiService.getById(id);
